@@ -10,40 +10,57 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  bool _isBlue = true;
+  ThemeData _currentTheme = ThemeData.dark();
+  Color _textColor = Colors.white;
 
-  void _toggleColor() {
+  void _toggleTheme() {
     setState(() {
-      _isBlue = !_isBlue;
+      _currentTheme = _currentTheme == ThemeData.dark()
+          ? ThemeData.light()
+          : ThemeData.dark();
+
+      // Обновление цвета текста после смены темы
+      _textColor = _currentTheme == ThemeData.dark() ? Colors.white : Colors.black;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData.dark(),
+      theme: _currentTheme,
       home: Scaffold(
         appBar: AppBar(
           title: const Text(
-            "Animated Example",
-            style: TextStyle(fontFamily: "FiraCode"),
+            "Example",
+            style: TextStyle(
+              fontFamily: "FiraCode",
+              color: Colors.white,
+            ),
           ),
           backgroundColor: Color.fromARGB(255, 15, 15, 15),
           centerTitle: true,
         ),
         body: GestureDetector(
-          onTap: _toggleColor,
+          onTap: _toggleTheme,
           child: Padding(
             padding: EdgeInsets.all(16.0),
-            child: Row(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text("made by me!", style: TextStyle(fontFamily: "FiraCode", color: _isBlue ? Colors.blue : Colors.white, fontSize: 25)),
+                Text(
+                  "made by me!",
+                  style: TextStyle(
+                    fontFamily: "FiraCode",
+                    color: _textColor,
+                    fontSize: 25,
+                  ),
+                ),
+                SizedBox(height: 20),
                 ElevatedButton(
-                  onPressed: () {
-                    print('Button pressed');
-                  },
-                  child: Text('Press Me'),
-                )
+                  onPressed: _toggleTheme,
+                  child: Text('Toggle Theme'),
+                ),
               ],
             ),
           ),
